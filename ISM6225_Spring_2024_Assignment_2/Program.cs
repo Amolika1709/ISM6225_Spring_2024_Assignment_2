@@ -99,12 +99,59 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Check if the array is empty, if so, return 0.
+                if (nums.Length == 0) return 0;
+
+                // Initialize a pointer i to keep track of the unique elements.
+                int i = 0;
+
+                // Iterate through the array starting from the second element.
+                for (int j = 1; j < nums.Length; j++)
+                {
+                    // If the current element is different from the previous unique element,
+                    // increment i and update nums[i] to the current element.
+                    if (nums[j] != nums[i])
+                    {
+                        i++;
+                        nums[i] = nums[j];
+                    }
+                }
+
+                // Create a StringBuilder to construct the output string.
+                StringBuilder output = new StringBuilder();
+                output.Append("Output: ");
+                output.Append(i + 1); // Number of unique elements.
+                output.Append(", nums = [");
+
+                // Iterate through the array to construct the output string.
+                for (int k = 0; k < nums.Length; k++)
+                {
+                    if (k <= i)
+                    {
+                        output.Append(nums[k]); // Append unique elements.
+                    }
+                    else
+                    {
+                        output.Append("_"); // Append placeholders for non-unique elements.
+                    }
+
+                    if (k < nums.Length - 1)
+                    {
+                        output.Append(", "); // Add comma and space for separation.
+                    }
+                }
+
+                output.Append("]");
+
+                // Print the formatted output.
+                Console.WriteLine(output.ToString());
+
+                // Return the number of unique elements (i + 1).
+                return i + 1;
             }
             catch (Exception)
             {
-                throw;
+                throw; // Propagate any exceptions.
             }
         }
 
@@ -134,8 +181,27 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<int>();
+                int lastNonZeroIndex = 0; // Initialize a variable to keep track of the last index where a non-zero element was found.
+
+                // Iterate through the array.
+                for (int currentIndex = 0; currentIndex < nums.Length; currentIndex++)
+                {
+                    // If the current element is non-zero, move it to the position of the last non-zero element found.
+                    if (nums[currentIndex] != 0)
+                    {
+                        nums[lastNonZeroIndex++] = nums[currentIndex];
+                    }
+                }
+
+                // After moving all non-zero elements to the beginning of the array, fill the remaining positions with zeros.
+                for (int i = lastNonZeroIndex; i < nums.Length; i++)
+                {
+                    nums[i] = 0;
+                }
+
+                // Convert the modified array to a list and return it.
+                return nums.ToList();
+
             }
             catch (Exception)
             {
@@ -185,8 +251,55 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<IList<int>>();
+                // Sort the input array in ascending order.
+                Array.Sort(nums);
+
+                // Initialize a list of lists to store the resulting triplets.
+                IList<IList<int>> result = new List<IList<int>>();
+
+                // Iterate through the array until the third last element.
+                for (int firstIndex = 0; firstIndex < nums.Length - 2; firstIndex++)
+                {
+                    // Check if it's the first element or a different element from the previous one.
+                    if (firstIndex == 0 || (firstIndex > 0 && nums[firstIndex] != nums[firstIndex - 1]))
+                    {
+                        // Set pointers for the two remaining elements of the triplet.
+                        int secondIndex = firstIndex + 1, thirdIndex = nums.Length - 1, targetSum = 0 - nums[firstIndex];
+
+                        // Iterate until the pointers meet.
+                        while (secondIndex < thirdIndex)
+                        {
+                            // If the sum of the two elements equals the target sum, add the triplet to the result.
+                            if (nums[secondIndex] + nums[thirdIndex] == targetSum)
+                            {
+                                result.Add(new List<int> { nums[firstIndex], nums[secondIndex], nums[thirdIndex] });
+
+                                // Skip duplicates for the left pointer.
+                                while (secondIndex < thirdIndex && nums[secondIndex] == nums[secondIndex + 1]) secondIndex++;
+                                // Skip duplicates for the right pointer.
+                                while (secondIndex < thirdIndex && nums[thirdIndex] == nums[thirdIndex - 1]) thirdIndex--;
+
+                                // Move both pointers inward.
+                                secondIndex++;
+                                thirdIndex--;
+                            }
+                            // If the sum is less than the target, move the left pointer to the right.
+                            else if (nums[secondIndex] + nums[thirdIndex] < targetSum)
+                            {
+                                secondIndex++;
+                            }
+                            // If the sum is greater than the target, move the right pointer to the left.
+                            else
+                            {
+                                thirdIndex--;
+                            }
+                        }
+                    }
+                }
+
+                // Return the list of triplets.
+                return result;
+
             }
             catch (Exception)
             {
@@ -220,8 +333,30 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Initialize variables to keep track of the maximum count of consecutive ones and the current count.
+                int maximumConsecutiveOnes = 0;
+                int currentConsecutiveOnes = 0;
+
+                // Iterate through the array.
+                foreach (int number in nums)
+                {
+                    // Check if the current number is 1.
+                    if (number == 1)
+                    {
+                        // Increment the count of consecutive ones and update the maximum count if needed.
+                        currentConsecutiveOnes++;
+                        maximumConsecutiveOnes = Math.Max(maximumConsecutiveOnes, currentConsecutiveOnes);
+                    }
+                    else
+                    {
+                        // If the current number is not 1, reset the count of consecutive ones.
+                        currentConsecutiveOnes = 0;
+                    }
+                }
+
+                // Return the maximum count of consecutive ones.
+                return maximumConsecutiveOnes;
+
             }
             catch (Exception)
             {
@@ -256,8 +391,29 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Initialize variables to store the decimal value and the base value.
+                int decimalValue = 0; // This will store the final decimal value.
+                int baseValue = 1; // This represents the current base value, starting with 2^0.
+
+                // Iterate until the binary number is greater than 0.
+                while (binary > 0)
+                {
+                    // Extract the last digit of the binary number.
+                    int lastDigit = binary % 10;
+
+                    // Remove the last digit from the binary number.
+                    binary = binary / 10;
+
+                    // Update the decimal value by adding the contribution of the last digit.
+                    decimalValue += lastDigit * baseValue;
+
+                    // Update the base value by multiplying it by 2, as we are moving to the next position.
+                    baseValue = baseValue * 2;
+                }
+
+                // Return the calculated decimal value.
+                return decimalValue;
+
             }
             catch (Exception)
             {
@@ -294,8 +450,28 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Check if the array has less than 2 elements, in which case the maximum gap is 0.
+                if (nums.Length < 2) return 0;
+
+                // Sort the array in ascending order.
+                Array.Sort(nums);
+
+                // Initialize a variable to store the maximum gap between consecutive elements.
+                int maxGap = 0;
+
+                // Iterate through the sorted array to find the maximum gap between consecutive elements.
+                for (int i = 1; i < nums.Length; i++)
+                {
+                    // Calculate the difference between the current element and the previous one.
+                    int gap = nums[i] - nums[i - 1];
+
+                    // Update the maximum gap if the current gap is greater.
+                    maxGap = Math.Max(maxGap, gap);
+                }
+
+                // Return the maximum gap.
+                return maxGap;
+
             }
             catch (Exception)
             {
@@ -334,8 +510,23 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
+                // Sort the array in non-decreasing order.
+                Array.Sort(nums);
+
+                // Iterate from the second last element backward until the third element.
+                for (int currentIndex = nums.Length - 3; currentIndex >= 0; currentIndex--)
+                {
+                    // Check if the current triplet forms a valid triangle.
+                    if (nums[currentIndex] + nums[currentIndex + 1] > nums[currentIndex + 2])
+                    {
+                        // If a valid triangle is found, return the sum of its sides.
+                        return nums[currentIndex] + nums[currentIndex + 1] + nums[currentIndex + 2];
+                    }
+                }
+
+                // If no valid triangle is found, return 0.
                 return 0;
+
             }
             catch (Exception)
             {
@@ -388,8 +579,22 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return "";
+                // Iterate as long as the string 's' contains the substring 'part'.
+                while (s.Contains(part))
+                {
+                    // Find the index of the first occurrence of the substring 'part' in the string 's'.
+                    int indexOfPart = s.IndexOf(part);
+
+                    // If the substring 'part' is found in the string 's', remove it.
+                    if (indexOfPart != -1)
+                    {
+                        s = s.Remove(indexOfPart, part.Length);
+                    }
+                }
+
+                // Return the modified string 's' enclosed within double quotes.
+                return $"\"{s}\"";
+
             }
             catch (Exception)
             {
